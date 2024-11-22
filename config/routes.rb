@@ -11,9 +11,9 @@ Rails.application.routes.draw do
 
   # Rutas para citas disponibles
   resources :citas_disponibles do
-    resources :reservas, only: [:new, :create]
+    resources :reservas, only: [:new, :create,]
   end
-
+  resources :reservas, only: [:index]
   # Rutas para los horarios
   resources :horarios, only: [:index, :new, :create, :update, :destroy]
 
