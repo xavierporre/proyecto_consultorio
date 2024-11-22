@@ -12,4 +12,10 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  resources :horarios, only: [:index, :new, :create] do
+    resources :citas_disponibles, only: [:index]
+  end
+
+  resources :citas_disponibles, only: [:update]
 end
