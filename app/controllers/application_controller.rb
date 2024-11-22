@@ -1,4 +1,10 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
+  # Sólo permitir navegadores modernos (opcional)
   allow_browser versions: :modern
+
+  # Excluir autenticación para ciertas rutas como citas_disponibles y root
+  
+
+  
+
 end

@@ -57,3 +57,11 @@ group :test do
 end
 
 gem "devise", "~> 4.9"
+
+gem 'bootstrap', '~> 5.0'
+
+gem 'sassc-rails'
+
+gem 'cssbundling-rails'
+
+gem 'dartsass-rails'

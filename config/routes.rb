@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :psicologos
+  devise_for :psicologos, controllers: { sessions: 'psicologos/sessions' }
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -11,11 +12,10 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  # Página principal
+  resources :citas_disponibles, only: [:index]
+  get '/horarios/index', to: 'horarios#index', as: :horarios
 
-  resources :horarios, only: [:index, :new, :create] do
-    resources :citas_disponibles, only: [:index]
-  end
+  root 'citas_disponibles#index' # Cambia esto según tu controlador de inicio
 
-  resources :citas_disponibles, only: [:update]
 end

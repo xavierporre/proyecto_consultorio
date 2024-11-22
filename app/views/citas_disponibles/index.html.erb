@@ -1,0 +1,32 @@
+<h1>Horarios Disponibles</h1>
+<% if flash[:alert] %>
+  <div class="alert alert-warning">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<table class="table table-bordered">
+  <thead class="thead-dark">
+    <tr>
+      <th>Fecha</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @horarios.present? %>
+      <% @horarios.each do |horario| %>
+        <% if horario.disponible? %>
+          <tr>
+            <td><%= horario.fecha.strftime("%d/%m/%Y") %></td>
+            <td><%= link_to 'Reservar', crear_cita_disponible_path(horario), class: 'btn btn-primary' %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="2">No hay horarios disponibles en este momento.</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
