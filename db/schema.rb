@@ -10,9 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_22_133624) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_22_134033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "citas_disponibles", force: :cascade do |t|
+    t.datetime "fecha_hora", null: false
+    t.string "estado", default: "disponible", null: false
+    t.bigint "horario_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["horario_id"], name: "index_citas_disponibles_on_horario_id"
+  end
+
+  create_table "horarios", force: :cascade do |t|
+    t.date "fecha"
+    t.time "hora_inicio"
+    t.time "hora_fin"
+    t.integer "intervalo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "psicologos", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -25,4 +43,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_22_133624) do
     t.index ["email"], name: "index_psicologos_on_email", unique: true
     t.index ["reset_password_token"], name: "index_psicologos_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "citas_disponibles", "horarios"
 end
