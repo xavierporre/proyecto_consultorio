@@ -7,3 +7,10 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+#crear los datos del psicologo 
+Psicologo.create!(
+  email: 'psicologo@consultorio.com',
+  password: 'password123',
+  password_confirmation: 'password123'
+)
