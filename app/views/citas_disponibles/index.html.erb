@@ -1,51 +1,65 @@
-<h1>Reservas Disponibles</h1>
-
-<% if flash[:alert] %>
-  <div class="alert alert-warning">
-    <%= flash[:alert] %>
+<div class="container mt-5">
+  <div class="text-center mb-4">
+    <h1 class="display-4 text-primary">Reservas Disponibles</h1>
+    <p class="text-muted">Filtra las fechas y reserva tu cita fácilmente.</p>
   </div>
-<% end %>
 
-<!-- Formulario para filtrar por rango de fechas -->
-<div class="mb-4">
-  <%= form_with url: citas_disponibles_path, method: :get, local: true, class: "form-inline" do |f| %>
-    <div class="form-group mr-2">
-      <%= f.label :fecha_inicio, "Desde:", class: "mr-2" %>
-      <%= f.date_field :fecha_inicio, value: params[:fecha_inicio], class: "form-control" %>
+  <% if flash[:alert] %>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <%= flash[:alert] %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    <div class="form-group mr-2">
-      <%= f.label :fecha_fin, "Hasta:", class: "mr-2" %>
-      <%= f.date_field :fecha_fin, value: params[:fecha_fin], class: "form-control" %>
-    </div>
-    <%= f.submit "Filtrar", class: "btn btn-primary" %>
   <% end %>
-</div>
 
-<table class="table table-bordered">
-  <thead class="thead-dark">
-    <tr>
-      <th>Fecha</th>
-      <th>Acción</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% if @citas_disponibles.present? %>
-      <% @citas_disponibles.each do |cita| %>
-        <tr>
-          <td><%= cita.fecha_hora.strftime("%d/%m/%Y %H:%M") %></td>
-          <td>
-            <% if cita.estado == 'disponible' %>
-              <%= button_to 'Reservar', new_citas_disponible_reserva_path(citas_disponible_id: cita.id), method: :get, class: 'btn btn-primary' %>
-            <% else %>
-              Reservada
-            <% end %>
-          </td>
-        </tr>
+  <!-- Formulario para filtrar por rango de fechas -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <%= form_with url: citas_disponibles_path, method: :get, local: true, class: "row g-3 align-items-center" do |f| %>
+        <div class="col-auto">
+          <%= f.label :fecha_inicio, "Desde:", class: "form-label" %>
+          <%= f.date_field :fecha_inicio, value: params[:fecha_inicio], class: "form-control" %>
+        </div>
+        <div class="col-auto">
+          <%= f.label :fecha_fin, "Hasta:", class: "form-label" %>
+          <%= f.date_field :fecha_fin, value: params[:fecha_fin], class: "form-control" %>
+        </div>
+        <div class="col-auto">
+          <%= f.submit "Filtrar", class: "btn btn-primary " %>
+        </div>
       <% end %>
-    <% else %>
-      <tr>
-        <td colspan="2">No hay reservas disponibles en este momento.</td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    </div>
+  </div>
+
+  <!-- Tabla de reservas -->
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th class="text-center">Fecha</th>
+          <th class="text-center">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @citas_disponibles.present? %>
+          <% @citas_disponibles.each do |cita| %>
+            <tr>
+              <td class="text-center"><%= cita.fecha_hora.strftime("%d/%m/%Y %H:%M") %></td>
+              <td class="text-center">
+                <% if cita.estado == 'disponible' %>
+                  <%= button_to 'Reservar', new_citas_disponible_reserva_path(citas_disponible_id: cita.id), 
+                      method: :get, class: 'btn btn-success btn-sm' %>
+                <% else %>
+                  <span class="badge bg-secondary">Reservada</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="2" class="text-center text-muted">No hay reservas disponibles en este momento.</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
