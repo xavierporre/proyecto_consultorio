@@ -2,29 +2,50 @@
 <html>
   <head>
     <title>Horarios Disponibles - Consultorio Psicológico</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   </head>
 
   <body>
     <div class="container mt-4">
-      <h1>Horarios Disponibles</h1>
-      
+      <h1>Gestión de Horarios</h1>
+
+      <!-- Formulario para crear un nuevo horario -->
+      <div class="mb-4">
+        <h2>Crear Nuevo Horario</h2>
+        <%= form_with model: @horario, local: true, class: "row g-3" do |f| %>
+          <div class="col-md-3">
+            <%= f.label :fecha, "Fecha" %>
+            <%= f.date_field :fecha, class: "form-control", required: true %>
+          </div>
+          <div class="col-md-3">
+            <%= f.label :hora_inicio, "Hora de Inicio" %>
+            <%= f.time_field :hora_inicio, class: "form-control", required: true %>
+          </div>
+          <div class="col-md-3">
+            <%= f.label :hora_fin, "Hora de Fin" %>
+            <%= f.time_field :hora_fin, class: "form-control", required: true %>
+          </div>
+          <div class="col-md-3">
+            <%= f.label :intervalo, "Intervalo (minutos)" %>
+            <%= f.number_field :intervalo, class: "form-control", step: 5, min: 5 %>
+          </div>
+          <div class="col-md-12 mt-3">
+            <%= f.submit "Crear Horario", class: "btn btn-success" %>
+          </div>
+        <% end %>
+      </div>
+
       <!-- Tabla para mostrar los horarios -->
+      <h2>Horarios Disponibles</h2>
       <table class="table table-striped">
         <thead>
           <tr>
             <th>Fecha</th>
-            <th>Hora</th>
-            <th>Estado</th>
+            <th>Hora Inicio</th>
+            <th>Hora Fin</th>
+            <th>Intervalo</th>
             <th>Acción</th>
           </tr>
         </thead>
@@ -32,20 +53,11 @@
           <% @horarios.each do |horario| %>
             <tr>
               <td><%= horario.fecha.strftime("%d/%m/%Y") %></td>
-              <td><%= horario.fecha.strftime("%H:%M") %></td>
+              <td><%= horario.hora_inicio.strftime("%H:%M") %></td>
+              <td><%= horario.hora_fin.strftime("%H:%M") %></td>
+              <td><%= horario.intervalo.present? ? "#{horario.intervalo} min" : "Sin intervalo" %></td>
               <td>
-                <% if horario.disponible? %>
-                  <span class="badge bg-success">Disponible</span>
-                <% else %>
-                  <span class="badge bg-danger">Reservada</span>
-                <% end %>
-              </td>
-              <td>
-                <% if horario.disponible? %>
-                  <%= link_to 'Reservar', create_cita_disponible_path(horario), method: :post, class: 'btn btn-primary' %>
-                <% else %>
-                  <button class="btn btn-secondary" disabled>Reservada</button>
-                <% end %>
+                <%= link_to 'Eliminar', horario_path(horario), method: :delete, data: { confirm: "¿Estás seguro?" }, class: 'btn btn-danger btn-sm' %>
               </td>
             </tr>
           <% end %>

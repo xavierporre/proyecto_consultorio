@@ -1,0 +1,21 @@
+<%= form_with model: @horario, local: true do |form| %>
+    <h1>Definir Horario Disponible</h1>
+  
+    <div class="form-group">
+      <%= form.label :dia %>
+      <%= form.select :dia, options_for_select([["Lunes", "Lunes"], ["Martes", "Martes"], ["Miércoles", "Miércoles"], ["Jueves", "Jueves"], ["Viernes", "Viernes"], ["Sábado", "Sábado"], ["Domingo", "Domingo"]]), prompt: "Selecciona un día", class: "form-control" %>
+    </div>
+  
+    <div class="form-group">
+      <%= form.label :hora_inicio %>
+      <%= form.time_select :hora_inicio, default: "09:00", class: "form-control" %>
+    </div>
+  
+    <div class="form-group">
+      <%= form.label :hora_fin %>
+      <%= form.time_select :hora_fin, default: "18:00", class: "form-control" %>
+    </div>
+  
+    <%= form.submit "Agregar Horario", class: "btn btn-primary" %>
+  <% end %>
+  

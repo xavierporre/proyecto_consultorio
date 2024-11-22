@@ -2,7 +2,7 @@
 
 class Psicologos::SessionsController < Devise::SessionsController
   # before_action :configure_sign_in_params, only: [:create]
-
+  before_action :require_no_authentication, only: [:new]
   # GET /resource/sign_in
   # def new
   #   super

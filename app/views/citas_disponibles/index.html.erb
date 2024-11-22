@@ -1,4 +1,5 @@
-<h1>Horarios Disponibles</h1>
+<h1>Reservas Disponibles</h1>
+
 <% if flash[:alert] %>
   <div class="alert alert-warning">
     <%= flash[:alert] %>
@@ -13,20 +14,25 @@
     </tr>
   </thead>
   <tbody>
-    <% if @horarios.present? %>
-      <% @horarios.each do |horario| %>
-        <% if horario.disponible? %>
-          <tr>
-            <td><%= horario.fecha.strftime("%d/%m/%Y") %></td>
-            <td><%= link_to 'Reservar', crear_cita_disponible_path(horario), class: 'btn btn-primary' %></td>
-          </tr>
-        <% end %>
+    <% if @citas_disponibles.present? %>
+      <% @citas_disponibles.each do |cita| %>
+        <tr>
+          <td><%= cita.fecha_hora.strftime("%d/%m/%Y %H:%M") %></td>
+          <td>
+            <!-- Botón para abrir el modal de reserva -->
+            <% if cita.estado == 'disponible' %>
+              <%= button_to 'Reservar', new_citas_disponible_reserva_path(citas_disponible_id: cita.id), method: :get, class: 'btn btn-primary' %>
+
+            <% else %>
+              Reservada
+            <% end %>
+          </td>
+        </tr>
       <% end %>
     <% else %>
       <tr>
-        <td colspan="2">No hay horarios disponibles en este momento.</td>
+        <td colspan="2">No hay reservas disponibles en este momento.</td>
       </tr>
     <% end %>
   </tbody>
 </table>
-

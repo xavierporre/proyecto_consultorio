@@ -1,21 +1,22 @@
 Rails.application.routes.draw do
+  # Rutas de Devise para psicólogos
   devise_for :psicologos, controllers: { sessions: 'psicologos/sessions' }
 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Rutas para la comprobación de estado de la aplicación (útil para monitoreo)
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/*
+  # Rutas para el PWA (Progressive Web App)
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  # Defines the root path route ("/")
-  # Página principal
-  resources :citas_disponibles, only: [:index]
-  get '/horarios/index', to: 'horarios#index', as: :horarios
+  # Rutas para citas disponibles
+  resources :citas_disponibles do
+    resources :reservas, only: [:new, :create]
+  end
 
-  root 'citas_disponibles#index' # Cambia esto según tu controlador de inicio
+  # Rutas para los horarios
+  resources :horarios, only: [:index, :new, :create, :update, :destroy]
 
+  # Ruta raíz
+  root 'citas_disponibles#index'
 end

@@ -1,0 +1,23 @@
+<h1>Reservar Cita</h1>
+
+<%= form_with(model: @reserva, url: citas_disponible_reservas_path(citas_disponible_id: @citas_disponible.id), method: :post, local: true) do |form| %>
+
+    <%= form.label :nombre, "Nombre" %>
+    <%= form.text_field :nombre, class: "form-control", required: true %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :rut, "RUT" %>
+    <%= form.text_field :rut, class: "form-control", required: true %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :email, "Correo" %>
+    <%= form.email_field :email, class: "form-control", required: true %>
+  </div>
+
+  <%= form.hidden_field :cita_disponible_id, value: @citas_disponible.id %>
+
+
+  <%= form.submit 'Reservar', class: 'btn btn-primary' %>
+<% end %>

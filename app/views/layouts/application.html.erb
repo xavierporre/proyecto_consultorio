@@ -12,48 +12,44 @@
     <!-- Bootstrap JS (opcional para interacciones) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <%= yield :head %>
-
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Consultorio Psicológico</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <% if current_psicologo %>
-              <!-- Si el psicólogo está autenticado, mostrar el enlace a la página de citas disponibles -->
-              <li class="nav-item">
-                <%= button_to 'Cerrar sesión', destroy_psicologo_session_path, method: :delete, class: 'btn btn-custom-danger', data: { turbo: false }  %>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="<%= horarios_path %>">Define Horario</a>
-              </li>
-            <% else %>
-              <!-- Si el psicólogo no está autenticado, mostrar el enlace a la página de login -->
-              <li class="nav-item">
-                <a class="nav-link" href="<%= new_psicologo_session_path %>">Iniciar sesión</a>
-              </li>
-            <% end %> 
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Consultorio Psicológico</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <% if current_psicologo %> <!-- Verifica si el psicólogo está autenticado -->
+            
             <li class="nav-item">
-              <a class="nav-link" href="<%= citas_disponibles_path %>">Citas Disponibles</a>
+              <%= button_to 'Cerrar sesión', destroy_psicologo_session_path, method: :delete, class: 'btn btn-danger', data: { turbo: false } %>
             </li>
-              
-          </ul>
-        </div>
+            <li class="nav-item">
+              <a class="nav-link" href="<%= horarios_path %>">Define Horario</a>
+            </li>
+          <% else %>
+            <!-- Si el psicólogo no está autenticado, mostrar el enlace a la página de login -->
+            <li class="nav-item">
+              <a class="nav-link" href="<%= new_psicologo_session_path %>">Iniciar sesión</a>
+            </li>
+          <% end %>
+          <!-- Siempre disponible para todos los usuarios -->
+          <li class="nav-item">
+            <a class="nav-link" href="<%= citas_disponibles_path %>">Citas Disponibles</a>
+          </li>
+        </ul>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <%= yield %> <!-- Aquí se renderizan las vistas -->
-  </body>
+  <%= yield %> <!-- Aquí se renderizan las vistas -->
+</body>
+
 </html>
