@@ -5,6 +5,8 @@
   <!-- Include Flatpickr CSS from CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+  
 </head>
 <body>
   <div class="container mt-5">
@@ -100,40 +102,54 @@
   
   <script>
     // Initialize Flatpickr for multiple date selection
-    const multipleDatesInput = document.getElementById('multipleDates');
-    const fpInstance = flatpickr(multipleDatesInput, {
-      mode: 'multiple',
-      dateFormat: 'Y-m-d',
-      locale: {
-        firstDayOfWeek: 1,
-        weekdays: {
-          shorthand: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
-          longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
-        },
-        months: {
-          shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-          longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
-        }
-      },
-      minDate: 'today',
-      altInput: true,
-      altFormat: 'd/m/Y',
-      conjunction: ', ',
-    });
-
-    // Add CSRF token to all AJAX requests
-    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    if (token) {
-      document.querySelectorAll('form').forEach(form => {
-        if (!form.querySelector('input[name="authenticity_token"]')) {
-          const tokenInput = document.createElement('input');
-          tokenInput.setAttribute('type', 'hidden');
-          tokenInput.setAttribute('name', 'authenticity_token');
-          tokenInput.setAttribute('value', token);
-          form.appendChild(tokenInput);
-        }
-      });
+   // Move the Flatpickr initialization into a function
+    function initializeFlatpickr() {
+      const multipleDatesInput = document.getElementById('multipleDates');
+      if (multipleDatesInput) {
+        const fpInstance = flatpickr(multipleDatesInput, {
+          mode: 'multiple',
+          dateFormat: 'Y-m-d',
+          locale: {
+            firstDayOfWeek: 1,
+            weekdays: {
+              shorthand: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+              longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+            },
+            months: {
+              shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+              longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+            }
+          },
+          minDate: 'today',
+          altInput: true,
+          altFormat: 'd/m/Y',
+          conjunction: ', ',
+        });
+      }
     }
+
+    // Initialize on document load
+    document.addEventListener('DOMContentLoaded', initializeFlatpickr);
+
+    // Initialize on Turbo navigation
+    document.addEventListener('turbo:load', initializeFlatpickr);
+    document.addEventListener('turbo:render', initializeFlatpickr);
+
+    // CSRF token handling
+    document.addEventListener('turbo:load', () => {
+      const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+      if (token) {
+        document.querySelectorAll('form').forEach(form => {
+          if (!form.querySelector('input[name="authenticity_token"]')) {
+            const tokenInput = document.createElement('input');
+            tokenInput.setAttribute('type', 'hidden');
+            tokenInput.setAttribute('name', 'authenticity_token');
+            tokenInput.setAttribute('value', token);
+            form.appendChild(tokenInput);
+          }
+        });
+      }
+    });
   </script>
 </body>
 </html>
