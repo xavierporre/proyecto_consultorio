@@ -18,24 +18,20 @@ class ReservasController < ApplicationController
   
       # Enviar invitación al calendario
       begin
-        CalendarInvitationService.new(
-          psicologo_email: "xporre@gmail.com", # Cambia por el email del psicólogo
-          paciente_email: @reserva.email,           # Email del paciente desde la reserva
-          fecha_hora: @citas_disponible.fecha_hora,
-          descripcion: "Sesión reservada con el psicólogo"
-        ).send_invitation
-  
-        notice_message = 'Reserva realizada con éxito e invitación enviada.'
+        # Send the invitation email
+        ReservaMailer.with(reserva: @reserva).confirmation_email.deliver_later
       rescue => e
-        Rails.logger.error("Error enviando la invitación: #{e.message}")
-        notice_message = 'Reserva realizada con éxito, pero no se pudo enviar la invitación.'
+        # Log the error but don't stop the process
+        Rails.logger.error "Error sending invitation: #{e.message}"
       end
   
-      redirect_to citas_disponibles_path, notice: notice_message
+      redirect_to citas_disponibles_path, notice: 'Reserva creada exitosamente.'
     else
+      # Corregido: Ahora 'render :new' está dentro del 'else'
       render :new
     end
   end
+  
   
   def index
     @reservas = Reserva.all  # O puedes filtrar las reservas según el psicólogo si es necesario
@@ -43,6 +39,6 @@ class ReservasController < ApplicationController
   private
 
   def reserva_params
-    params.require(:reserva).permit(:nombre, :rut, :email)
+    params.require(:reserva).permit(:nombre, :rut, :email, :cita_disponible_id)
   end
 end
