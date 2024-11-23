@@ -2,7 +2,16 @@ class HorariosController < ApplicationController
   before_action :authenticate_psicologo!
   
   def index
-    @horarios = Horario.all.order(fecha: :asc, hora_inicio: :asc)
+    @horarios = Horario.all
+
+    # Filtrar por fechas si se envían parámetros
+    if params[:fecha_inicio].present? && params[:fecha_fin].present?
+      @horarios = @horarios.where(fecha: params[:fecha_inicio]..params[:fecha_fin])
+    end
+
+    # Paginación (10 resultados por página)
+    @horarios = @horarios.page(params[:page]).per(10)
+
     @horario = Horario.new
   end
 

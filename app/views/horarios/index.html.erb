@@ -5,8 +5,6 @@
   <!-- Include Flatpickr CSS from CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-
-  
 </head>
 <body>
   <div class="container mt-5">
@@ -59,6 +57,30 @@
       </div>
     </div>
 
+    <!-- Formulario para Filtrar Horarios -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-secondary text-white">
+        <h2 class="h5 mb-0">Filtrar Horarios</h2>
+      </div>
+      <div class="card-body">
+        <%= form_with(url: horarios_path, method: :get, local: true, class: "row g-3", id: "filterForm") do |f| %>
+          <div class="col-md-4">
+            <%= f.label :fecha_inicio, "Fecha de Inicio", class: "form-label" %>
+            <%= f.date_field :fecha_inicio, class: "form-control" %>
+          </div>
+          <div class="col-md-4">
+            <%= f.label :fecha_fin, "Fecha de Fin", class: "form-label" %>
+            <%= f.date_field :fecha_fin, class: "form-control" %>
+          </div>
+          <div class="col-md-4 mt-3">
+            <%= f.submit "Filtrar", class: "btn btn-primary" %>
+            <%= link_to "Limpiar Filtro", horarios_path, class: "btn btn-secondary ms-2" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Tabla de Resultados -->
     <div class="card shadow-sm">
       <div class="card-header bg-secondary text-white">
         <h2 class="h5 mb-0">Horarios Disponibles</h2>
@@ -92,6 +114,12 @@
             <% end %>
           </tbody>
         </table>
+
+        <!-- Paginación -->
+        <div class="pagination">
+          <%= link_to 'Anterior', horarios_path(page: @horarios.prev_page) if @horarios.prev_page %>
+          <%= link_to 'Siguiente', horarios_path(page: @horarios.next_page) if @horarios.next_page %>
+        </div>
       </div>
     </div>
   </div>
@@ -102,7 +130,6 @@
   
   <script>
     // Initialize Flatpickr for multiple date selection
-   // Move the Flatpickr initialization into a function
     function initializeFlatpickr() {
       const multipleDatesInput = document.getElementById('multipleDates');
       if (multipleDatesInput) {
@@ -134,22 +161,6 @@
     // Initialize on Turbo navigation
     document.addEventListener('turbo:load', initializeFlatpickr);
     document.addEventListener('turbo:render', initializeFlatpickr);
-
-    // CSRF token handling
-    document.addEventListener('turbo:load', () => {
-      const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-      if (token) {
-        document.querySelectorAll('form').forEach(form => {
-          if (!form.querySelector('input[name="authenticity_token"]')) {
-            const tokenInput = document.createElement('input');
-            tokenInput.setAttribute('type', 'hidden');
-            tokenInput.setAttribute('name', 'authenticity_token');
-            tokenInput.setAttribute('value', token);
-            form.appendChild(tokenInput);
-          }
-        });
-      }
-    });
   </script>
 </body>
 </html>
