@@ -65,3 +65,6 @@ gem 'sassc-rails'
 gem 'cssbundling-rails'
 
 gem 'dartsass-rails'
+
+#gem para hacer invitaciones de calendario
+gem 'icalendar'

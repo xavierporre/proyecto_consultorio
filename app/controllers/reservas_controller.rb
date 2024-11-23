@@ -11,11 +11,27 @@ class ReservasController < ApplicationController
   def create
     @citas_disponible = CitaDisponible.find(params[:citas_disponible_id])
     @reserva = @citas_disponible.reservas.build(reserva_params)
-
+  
     if @reserva.save
       # Cambiar el estado de la cita a 'reservada'
       @citas_disponible.update(estado: 'reservada')
-      redirect_to citas_disponibles_path, notice: 'Reserva realizada con éxito.'
+  
+      # Enviar invitación al calendario
+      begin
+        CalendarInvitationService.new(
+          psicologo_email: "xporre@gmail.com", # Cambia por el email del psicólogo
+          paciente_email: @reserva.email,           # Email del paciente desde la reserva
+          fecha_hora: @citas_disponible.fecha_hora,
+          descripcion: "Sesión reservada con el psicólogo"
+        ).send_invitation
+  
+        notice_message = 'Reserva realizada con éxito e invitación enviada.'
+      rescue => e
+        Rails.logger.error("Error enviando la invitación: #{e.message}")
+        notice_message = 'Reserva realizada con éxito, pero no se pudo enviar la invitación.'
+      end
+  
+      redirect_to citas_disponibles_path, notice: notice_message
     else
       render :new
     end

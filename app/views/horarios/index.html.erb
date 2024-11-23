@@ -8,61 +8,74 @@
   </head>
 
   <body>
-    <div class="container mt-4">
-      <h1>Gestión de Horarios</h1>
+    <div class="container mt-5">
+      <div class="text-center mb-4">
+        <h1 class="display-4 text-primary">Gestión de Horarios</h1>
+        <p class="lead text-muted">Administra los horarios disponibles para tu consultorio.</p>
+      </div>
 
       <!-- Formulario para crear un nuevo horario -->
-      <div class="mb-4">
-        <h2>Crear Nuevo Horario</h2>
-        <%= form_with model: @horario, local: true, class: "row g-3" do |f| %>
-          <div class="col-md-3">
-            <%= f.label :fecha, "Fecha" %>
-            <%= f.date_field :fecha, class: "form-control", required: true %>
-          </div>
-          <div class="col-md-3">
-            <%= f.label :hora_inicio, "Hora de Inicio" %>
-            <%= f.time_field :hora_inicio, class: "form-control", required: true %>
-          </div>
-          <div class="col-md-3">
-            <%= f.label :hora_fin, "Hora de Fin" %>
-            <%= f.time_field :hora_fin, class: "form-control", required: true %>
-          </div>
-          <div class="col-md-3">
-            <%= f.label :intervalo, "Intervalo (minutos)" %>
-            <%= f.number_field :intervalo, class: "form-control", step: 5, min: 5 %>
-          </div>
-          <div class="col-md-12 mt-3">
-            <%= f.submit "Crear Horario", class: "btn btn-success" %>
-          </div>
-        <% end %>
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="h5 mb-0">Crear Nuevo Horario</h2>
+        </div>
+        <div class="card-body">
+          <%= form_with model: @horario, local: true, class: "row g-3" do |f| %>
+            <div class="col-md-3">
+              <%= f.label :fecha, "Fecha", class: "form-label" %>
+              <%= f.date_field :fecha, class: "form-control", required: true %>
+            </div>
+            <div class="col-md-3">
+              <%= f.label :hora_inicio, "Hora de Inicio", class: "form-label" %>
+              <%= f.time_field :hora_inicio, class: "form-control", required: true %>
+            </div>
+            <div class="col-md-3">
+              <%= f.label :hora_fin, "Hora de Fin", class: "form-label" %>
+              <%= f.time_field :hora_fin, class: "form-control", required: true %>
+            </div>
+            <div class="col-md-3">
+              <%= f.label :intervalo, "Intervalo (minutos)", class: "form-label" %>
+              <%= f.number_field :intervalo, class: "form-control", step: 5, min: 5 %>
+            </div>
+            <div class="col-md-12 mt-3">
+              <%= f.submit "Crear Horario", class: "btn btn-success" %>
+            </div>
+          <% end %>
+        </div>
       </div>
 
       <!-- Tabla para mostrar los horarios -->
-      <h2>Horarios Disponibles</h2>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Hora Inicio</th>
-            <th>Hora Fin</th>
-            <th>Intervalo</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @horarios.each do |horario| %>
-            <tr>
-              <td><%= horario.fecha.strftime("%d/%m/%Y") %></td>
-              <td><%= horario.hora_inicio.strftime("%H:%M") %></td>
-              <td><%= horario.hora_fin.strftime("%H:%M") %></td>
-              <td><%= horario.intervalo.present? ? "#{horario.intervalo} min" : "Sin intervalo" %></td>
-              <td>
-                <%= link_to 'Eliminar', horario_path(horario), method: :delete, data: { confirm: "¿Estás seguro?" }, class: 'btn btn-danger btn-sm' %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white">
+          <h2 class="h5 mb-0">Horarios Disponibles</h2>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-striped table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th>Fecha</th>
+                <th>Hora Inicio</th>
+                <th>Hora Fin</th>
+                <th>Intervalo</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @horarios.each do |horario| %>
+                <tr>
+                  <td><%= horario.fecha.strftime("%d/%m/%Y") %></td>
+                  <td><%= horario.hora_inicio.strftime("%H:%M") %></td>
+                  <td><%= horario.hora_fin.strftime("%H:%M") %></td>
+                  <td><%= horario.intervalo.present? ? "#{horario.intervalo} min" : "Sin intervalo" %></td>
+                  <td>
+                    <%= link_to 'Eliminar', horario_path(horario), method: :delete, data: { confirm: "¿Estás seguro?" }, class: 'btn btn-danger btn-sm' %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </body>
 </html>
