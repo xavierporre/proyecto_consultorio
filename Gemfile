@@ -68,3 +68,7 @@ gem 'dartsass-rails'
 
 #gem para hacer invitaciones de calendario
 gem 'icalendar'
+
+#gem para paginar 
+gem 'kaminari'
+gem 'bootstrap4-kaminari-views'

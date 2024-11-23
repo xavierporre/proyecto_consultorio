@@ -3,14 +3,12 @@
     <h1 class="display-4 text-primary">Reservas Disponibles</h1>
     <p class="text-muted">Filtra las fechas y reserva tu cita fácilmente.</p>
   </div>
-
   <% if flash[:alert] %>
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
       <%= flash[:alert] %>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   <% end %>
-
   <!-- Formulario para filtrar por rango de fechas -->
   <div class="card mb-4 shadow-sm">
     <div class="card-body">
@@ -24,12 +22,13 @@
           <%= f.date_field :fecha_fin, value: params[:fecha_fin], class: "form-control" %>
         </div>
         <div class="col-auto">
-          <%= f.submit "Filtrar", class: "btn btn-primary " %>
+          <%= f.submit "Filtrar", class: "btn btn-primary" %>
+          <!-- Botón para limpiar el filtro -->
+          <%= link_to 'Limpiar Filtro', citas_disponibles_path, class: "btn btn-secondary ms-2" %>
         </div>
       <% end %>
     </div>
   </div>
-
   <!-- Tabla de reservas -->
   <div class="table-responsive">
     <table class="table table-hover table-bordered">
@@ -61,5 +60,9 @@
         <% end %>
       </tbody>
     </table>
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center">
+      <%= paginate @citas_disponibles %>
+    </div>
   </div>
 </div>
