@@ -1,7 +1,7 @@
 class CitaDisponible < ApplicationRecord
   self.table_name = 'citas_disponibles'
   belongs_to :horario
-  has_many :reservas
+  has_many :reservas, dependent: :destroy
 
   validates :fecha_hora, presence: true
   validates :estado, inclusion: { in: %w[disponible reservada cancelada] }

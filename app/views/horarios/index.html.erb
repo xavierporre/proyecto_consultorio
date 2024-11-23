@@ -1,81 +1,139 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Horarios Disponibles - Consultorio Psicológico</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  </head>
-
-  <body>
-    <div class="container mt-5">
-      <div class="text-center mb-4">
-        <h1 class="display-4 text-primary">Gestión de Horarios</h1>
-        <p class="lead text-muted">Administra los horarios disponibles para tu consultorio.</p>
+<head>
+  <title>Horarios Disponibles - Consultorio Psicológico</title>
+  <!-- Include Flatpickr CSS from CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="text-center mb-4">
+      <h1 class="display-4 text-primary">Gestión de Horarios</h1>
+      <p class="lead text-muted">Administra los horarios disponibles para tu consultorio.</p>
+    </div>
+    
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <h2 class="h5 mb-0">Crear Nuevo Horario</h2>
       </div>
-
-      <!-- Formulario para crear un nuevo horario -->
-      <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-primary text-white">
-          <h2 class="h5 mb-0">Crear Nuevo Horario</h2>
-        </div>
-        <div class="card-body">
-          <%= form_with model: @horario, local: true, class: "row g-3" do |f| %>
-            <div class="col-md-3">
-              <%= f.label :fecha, "Fecha", class: "form-label" %>
-              <%= f.date_field :fecha, class: "form-control", required: true %>
-            </div>
-            <div class="col-md-3">
-              <%= f.label :hora_inicio, "Hora de Inicio", class: "form-label" %>
-              <%= f.time_field :hora_inicio, class: "form-control", required: true %>
-            </div>
-            <div class="col-md-3">
-              <%= f.label :hora_fin, "Hora de Fin", class: "form-label" %>
-              <%= f.time_field :hora_fin, class: "form-control", required: true %>
-            </div>
-            <div class="col-md-3">
-              <%= f.label :intervalo, "Intervalo (minutos)", class: "form-label" %>
-              <%= f.number_field :intervalo, class: "form-control", step: 5, min: 5 %>
-            </div>
-            <div class="col-md-12 mt-3">
-              <%= f.submit "Crear Horario", class: "btn btn-success" %>
+      <div class="card-body">
+        <%= form_with(model: @horario, local: true, class: "row g-3", id: "horarioForm") do |f| %>
+          <% if @horario.errors.any? %>
+            <div class="alert alert-danger">
+              <h4><%= pluralize(@horario.errors.count, "error") %> impidieron guardar este horario:</h4>
+              <ul>
+                <% @horario.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+              </ul>
             </div>
           <% end %>
-        </div>
-      </div>
 
-      <!-- Tabla para mostrar los horarios -->
-      <div class="card shadow-sm">
-        <div class="card-header bg-secondary text-white">
-          <h2 class="h5 mb-0">Horarios Disponibles</h2>
-        </div>
-        <div class="card-body">
-          <table class="table table-bordered table-striped table-hover">
-            <thead class="thead-dark">
-              <tr>
-                <th>Fecha</th>
-                <th>Hora Inicio</th>
-                <th>Hora Fin</th>
-                <th>Intervalo</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @horarios.each do |horario| %>
-                <tr>
-                  <td><%= horario.fecha.strftime("%d/%m/%Y") %></td>
-                  <td><%= horario.hora_inicio.strftime("%H:%M") %></td>
-                  <td><%= horario.hora_fin.strftime("%H:%M") %></td>
-                  <td><%= horario.intervalo.present? ? "#{horario.intervalo} min" : "Sin intervalo" %></td>
-                  <td>
-                    <%= link_to 'Eliminar', horario_path(horario), method: :delete, data: { confirm: "¿Estás seguro?" }, class: 'btn btn-danger btn-sm' %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
+          <div class="col-md-3">
+            <%= f.label :fechas, "Fechas", class: "form-label" %>
+            <%= f.text_field :fechas, class: "form-control", required: true, id: "multipleDates" %>
+          </div>
+          
+          <div class="col-md-3">
+            <%= f.label :hora_inicio, "Hora de Inicio", class: "form-label" %>
+            <%= f.time_field :hora_inicio, class: "form-control", required: true %>
+          </div>
+
+          <div class="col-md-3">
+            <%= f.label :hora_fin, "Hora de Fin", class: "form-label" %>
+            <%= f.time_field :hora_fin, class: "form-control", required: true %>
+          </div>
+
+          <div class="col-md-3">
+            <%= f.label :intervalo, "Intervalo (minutos)", class: "form-label" %>
+            <%= f.number_field :intervalo, class: "form-control", step: 5, min: 5, required: true %>
+          </div>
+
+          <div class="col-md-12 mt-3">
+            <%= f.submit "Crear Horario", class: "btn btn-success" %>
+          </div>
+        <% end %>
       </div>
     </div>
-  </body>
+
+    <div class="card shadow-sm">
+      <div class="card-header bg-secondary text-white">
+        <h2 class="h5 mb-0">Horarios Disponibles</h2>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered table-striped table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th>Fecha</th>
+              <th>Hora Inicio</th>
+              <th>Hora Fin</th>
+              <th>Intervalo</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @horarios.each do |horario| %>
+              <tr>
+                <td><%= horario.fecha.strftime("%d/%m/%Y") %></td>
+                <td><%= horario.hora_inicio.strftime("%H:%M") %></td>
+                <td><%= horario.hora_fin.strftime("%H:%M") %></td>
+                <td><%= "#{horario.intervalo} min" %></td>
+                <td>
+                  <%= button_to 'Eliminar', 
+                      horario_path(horario), 
+                      method: :delete, 
+                      class: 'btn btn-danger btn-sm',
+                      form: { data: { turbo_confirm: '¿Estás seguro?' } } %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include necessary JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Initialize Flatpickr for multiple date selection
+    const multipleDatesInput = document.getElementById('multipleDates');
+    const fpInstance = flatpickr(multipleDatesInput, {
+      mode: 'multiple',
+      dateFormat: 'Y-m-d',
+      locale: {
+        firstDayOfWeek: 1,
+        weekdays: {
+          shorthand: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+          longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+        },
+        months: {
+          shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+          longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+        }
+      },
+      minDate: 'today',
+      altInput: true,
+      altFormat: 'd/m/Y',
+      conjunction: ', ',
+    });
+
+    // Add CSRF token to all AJAX requests
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (token) {
+      document.querySelectorAll('form').forEach(form => {
+        if (!form.querySelector('input[name="authenticity_token"]')) {
+          const tokenInput = document.createElement('input');
+          tokenInput.setAttribute('type', 'hidden');
+          tokenInput.setAttribute('name', 'authenticity_token');
+          tokenInput.setAttribute('value', token);
+          form.appendChild(tokenInput);
+        }
+      });
+    }
+  </script>
+</body>
 </html>

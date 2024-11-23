@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   end
   resources :reservas, only: [:index]
   # Rutas para los horarios
-  resources :horarios, only: [:index, :new, :create, :update, :destroy]
+  resources :horarios, only: [:index, :new, :create, :destroy]
 
   # Ruta raíz
   root 'citas_disponibles#index'
