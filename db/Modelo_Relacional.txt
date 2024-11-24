@@ -1,0 +1,66 @@
+
+# Modelo Relacional de la Base de Datos
+
+## Tablas y sus Atributos
+
+1. **Psicologos**
+   - **id** (PK): Identificador único del psicólogo.
+   - **email**: Correo electrónico del psicólogo (único, no nulo).
+   - **encrypted_password**: Contraseña cifrada (no nula).
+   - **reset_password_token**: Token para restablecer contraseña (único, opcional).
+   - **reset_password_sent_at**: Fecha y hora de envío del token para restablecer contraseña.
+   - **remember_created_at**: Fecha y hora de creación del token de "recordarme".
+   - **created_at**: Fecha y hora de creación del registro.
+   - **updated_at**: Fecha y hora de la última actualización del registro.
+
+2. **Horarios**
+   - **id** (PK): Identificador único del horario.
+   - **fecha**: Fecha del horario.
+   - **hora_inicio**: Hora de inicio del horario.
+   - **hora_fin**: Hora de fin del horario.
+   - **intervalo**: Duración de cada intervalo en minutos.
+   - **created_at**: Fecha y hora de creación del registro.
+   - **updated_at**: Fecha y hora de la última actualización del registro.
+
+3. **CitasDisponibles**
+   - **id** (PK): Identificador único de la cita disponible.
+   - **fecha_hora**: Fecha y hora de la cita (no nulo).
+   - **estado**: Estado de la cita (por defecto: "disponible", no nulo).
+   - **horario_id** (FK): Relación con la tabla **Horarios** (no nulo).
+   - **created_at**: Fecha y hora de creación del registro.
+   - **updated_at**: Fecha y hora de la última actualización del registro.
+
+4. **Reservas**
+   - **id** (PK): Identificador único de la reserva.
+   - **nombre**: Nombre del paciente.
+   - **rut**: RUT del paciente.
+   - **email**: Correo electrónico del paciente.
+   - **estado**: Estado de la reserva.
+   - **cita_disponible_id** (FK): Relación con la tabla **CitasDisponibles** (no nulo).
+   - **created_at**: Fecha y hora de creación del registro.
+   - **updated_at**: Fecha y hora de la última actualización del registro.
+
+## Relaciones
+
+1. **Psicólogos** no tiene relaciones explícitas con otras tablas, ya que solo existe un psicólogo en el sistema.
+2. **Horarios** tiene una relación de uno a muchos con **CitasDisponibles**:
+   - Un horario puede tener varias citas disponibles.
+   - Una cita disponible pertenece a un horario.
+3. **CitasDisponibles** tiene una relación de uno a uno con **Reservas**:
+   - Una cita disponible puede ser reservada una sola vez.
+   - Una reserva corresponde a una cita disponible.
+
+## Restricciones
+
+1. **Claves primarias**:
+   - `id` en todas las tablas es la clave primaria.
+2. **Claves foráneas**:
+   - `horario_id` en **CitasDisponibles** referencia a `id` en **Horarios**.
+   - `cita_disponible_id` en **Reservas** referencia a `id` en **CitasDisponibles**.
+3. **Restricciones únicas**:
+   - `email` en **Psicologos** es único.
+   - `reset_password_token` en **Psicologos** es único.
+4. **Restricciones de no nulidad**:
+   - Atributos como `fecha_hora` y `estado` en **CitasDisponibles**, `email` en **Psicologos**, y las claves foráneas no pueden ser nulos.
+
+Este diseño sigue un modelo relacional clásico con claves primarias y foráneas para garantizar la integridad referencial entre las tablas.
