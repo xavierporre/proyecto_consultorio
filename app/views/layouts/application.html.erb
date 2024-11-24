@@ -42,7 +42,7 @@
             <% else %>
               <!-- Si el psicólogo no está autenticado, mostrar el enlace a la página de login -->
               <li class="nav-item">
-                <a class="nav-link" href="<%= new_psicologo_session_path %>">Iniciar sesión</a>
+                <a class="nav-link" href="<%= new_psicologo_session_path %>">Administrar</a>
               </li>
             <% end %>
             <!-- Siempre disponible para todos los usuarios -->
@@ -55,6 +55,6 @@
     </nav>
 
     <%= yield %> <!-- Aquí se renderizan las vistas -->
-  </body>
+</body>
 
 </html>

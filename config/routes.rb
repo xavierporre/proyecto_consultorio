@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   # Rutas de Devise para psicólogos
-  devise_for :psicologos, controllers: { sessions: 'psicologos/sessions' }
+  devise_for :psicologos, skip: [:registrations], controllers: {
+  sessions: 'psicologos/sessions',
+  registrations: 'psicologos/registrations'
+}
+
 
   # Rutas para la comprobación de estado de la aplicación (útil para monitoreo)
   get "up" => "rails/health#show", as: :rails_health_check
