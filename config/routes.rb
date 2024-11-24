@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   resources :citas_disponibles do
     resources :reservas, only: [:new, :create,]
   end
-  resources :reservas, only: [:index]
+  resources :reservas, only: [:index, :destroy]
   # Rutas para los horarios
   resources :horarios, only: [:index, :new, :create, :destroy]
 

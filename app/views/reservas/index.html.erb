@@ -37,6 +37,12 @@
                     <td><%= reserva.rut %></td>
                     <td><%= reserva.email %></td>
                     <td><%= reserva.cita_disponible.fecha_hora.strftime("%d/%m/%Y %H:%M") %></td>
+                    <td>
+                      <%= button_to 'Eliminar', reserva_path(reserva), 
+                                  method: :delete, 
+                                  data: { confirm: '¿Estás seguro de eliminar esta reserva?' }, 
+                                  class: 'btn btn-danger btn-sm' %>
+                    </td>
                   </tr>
                 <% end %>
               <% else %>

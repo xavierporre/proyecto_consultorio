@@ -31,7 +31,12 @@ class ReservasController < ApplicationController
       render :new
     end
   end
-  
+  def destroy
+    @reserva = Reserva.find(params[:id])
+    @reserva.destroy
+
+    redirect_to reservas_path, notice: 'Reserva eliminada exitosamente.'
+  end
   
   def index
     @reservas = Reserva.all  # O puedes filtrar las reservas según el psicólogo si es necesario
