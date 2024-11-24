@@ -12,4 +12,12 @@ class ReservaMailer < ApplicationMailer
       subject: 'Confirmación de su reserva'
     )
   end
+
+  def cancelation_email
+    @reserva = params[:reserva]
+    mail(
+      to: @reserva.email,
+      subject: 'Cancelación de tu reserva en el Consultorio Psicológico'
+    )
+  end
 end

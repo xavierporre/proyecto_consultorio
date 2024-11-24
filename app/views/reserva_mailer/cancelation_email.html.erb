@@ -1,0 +1,9 @@
+<h1>Cancelación de Reserva</h1>
+<p>Hola <%= @reserva.nombre %>,</p>
+<p>Lamentamos informarte que tu reserva ha sido cancelada.</p>
+<p>Detalles de la reserva cancelada:</p>
+<ul>
+  <li>Cita: <%= @reserva.cita_disponible.try(:id) %></li>
+  <li>Fecha y hora: <%= @reserva.cita_disponible.try(:fecha_hora) %></li>
+</ul>
+<p>Por favor, contáctanos si necesitas más información.</p>

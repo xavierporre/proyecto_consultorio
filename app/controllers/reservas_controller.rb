@@ -1,7 +1,7 @@
 class ReservasController < ApplicationController
 
   # Asegurarse de que solo el psicólogo autenticado pueda acceder a la acción 'index'
-  before_action :authenticate_psicologo!, only: [:index]  # Solo para 'index'
+  before_action :authenticate_psicologo!, only: [:index, :destroy]  # Solo para 'index'
 
   def new
     @citas_disponible = CitaDisponible.find(params[:citas_disponible_id])

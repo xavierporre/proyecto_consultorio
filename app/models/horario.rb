@@ -26,21 +26,24 @@ class Horario < ApplicationRecord
       # Generate appointments
       bloques.times do |i|
         inicio_bloque = inicio + (i * duracion_intervalo_segundos)
-        
-        # Create the appointment using fecha from horario
-        cita_disponibles.create!(
-          fecha_hora: DateTime.new(
-            fecha.year,
-            fecha.month,
-            fecha.day,
-            inicio_bloque.hour,
-            inicio_bloque.min,
-            0,
-            Time.zone.utc_offset
-          ),
-          estado: 'disponible',
-          horario: self
+        fecha_hora_cita = DateTime.new(
+          fecha.year,
+          fecha.month,
+          fecha.day,
+          inicio_bloque.hour,
+          inicio_bloque.min,
+          0,
+          Time.zone.utc_offset
         )
+        
+        # Check if appointment already exists for this time slot
+        unless cita_disponibles.exists?(fecha_hora: fecha_hora_cita)
+          cita_disponibles.create!(
+            fecha_hora: fecha_hora_cita,
+            estado: 'disponible',
+            horario: self
+          )
+        end
       end
     end
 
