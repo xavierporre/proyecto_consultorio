@@ -16,6 +16,7 @@ Things you may want to cover:
 * Database initialization
 
 * How to run the test suite
+  usuario de prueba para el psicologo se encuentra en el archivo seed
 
 * Services (job queues, cache servers, search engines, etc.)
 
